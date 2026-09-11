@@ -37,14 +37,17 @@ Open: http://127.0.0.1:8000
 1. Push the `scoring_system` folder to a GitHub repo (or the whole Meesho project).
 2. Render Dashboard → **New → Web Service** → connect repo.
 3. Settings:
-   - **Root Directory:** `scoring_system` (if repo is the parent Meesho folder)
+   - **Root Directory:** leave empty (this repo *is* the app root)
    - **Runtime:** Python
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. **Environment variables:**
+4. **Environment variables (required):**
+   - `PYTHON_VERSION` = `3.12.7` (**must set** — Render defaults to 3.14, which breaks pydantic)
    - `GEMINI_API_KEY` = your Gemini key (**required for AI narratives**)
    - `GEMINI_MODEL` = `gemini-3.6-flash` (optional)
 5. Deploy. Health check: `GET /health`
+
+> Repo also includes `.python-version` (`3.12.7`) so Render picks 3.12 even if you forget the env var.
 
 Or use Blueprint: `render.yaml` in this folder.
 
