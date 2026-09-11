@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meesho UTI Trust Score</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <strong>Meesho UTI · Return Shield</strong>
+      <div>
+        <a href="/">Dashboard</a>
+        <a href="/dispute">Analyze Dispute</a>
+        <a href="/health">Health</a>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>User Trust Index (UTI) — e-comm CIBIL for C2M</h1>
+      <p>
+        Deterministic scoring for customers, Valmo riders, and manufacturers.
+        Gemini explains disputes; rules decide liability (damage → manufacturer, tamper/empty → Meesho/delivery).
+        {% if gemini_configured %}
+          <span class="badge-key">Gemini API connected</span>
+        {% else %}
+          <span class="badge-key off">Set GEMINI_API_KEY to enable AI narratives</span>
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="grid">
+      {% for c in customers %}
+      <div class="card">
+        <h3>{{ c.name }} <span class="muted">· {{ c.customer_id }}</span></h3>
+        <div class="score">{{ c.uti.score }}<span class="muted" style="font-size:1rem">/900</span></div>
+        <div class="band {{ c.uti.band }}">Band {{ c.uti.band }} · {{ c.uti.label }}</div>
+        <p class="muted" style="margin-top:10px">{{ c.policy.action }}</p>
+        <a class="btn secondary" href="/customer/{{ c.customer_id }}">Open profile</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="grid" style="margin-top:18px">
+      <div class="card">
+        <h3>Manufacturers</h3>
+        <table>
+          <tr><th>Name</th><th>ID</th></tr>
+          {% for m in manufacturers %}
+          <tr><td>{{ m.name }}</td><td>{{ m.manufacturer_id }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="card">
+        <h3>Valmo Riders</h3>
+        <table>
+          <tr><th>Name</th><th>ID</th></tr>
+          {% for r in riders %}
+          <tr><td>{{ r.name }}</td><td>{{ r.delivery_partner_id }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h3>Recent dispute decisions</h3>
+      {% if disputes %}
+      <table>
+        <tr><th>Order</th><th>Liable</th><th>UTI after</th></tr>
+        {% for d in disputes %}
+        <tr>
+          <td>{{ d.order_id }}</td>
+          <td>{{ d.liable }}</td>
+          <td>{{ d.uti_after.score }}/900</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p class="muted">No disputes yet — try <a href="/dispute">Analyze Dispute</a>.</p>
+      {% endif %}
+    </div>
+
+    <p class="footer">Demo for Meesho DICE C2M · Not affiliated with Meesho · Deploy on Render with GEMINI_API_KEY</p>
+  </div>
+</body>
+</html>

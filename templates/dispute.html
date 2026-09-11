@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dispute Analyzer · UTI</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <strong>Return Shield · Dispute Agent</strong>
+      <div><a href="/">← Dashboard</a></div>
+    </div>
+
+    <div class="hero">
+      <h1>Analyze a return / RTO dispute</h1>
+      <p>
+        Rules decide who pays. Gemini writes the manufacturer-facing explanation.
+        {% if gemini_configured %}
+          <span class="badge-key">Gemini on</span>
+        {% else %}
+          <span class="badge-key off">Gemini off — rules still work</span>
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <form method="post" action="/dispute">
+        <div class="row">
+          <div>
+            <label>Order ID</label>
+            <input name="order_id" required value="ORD-DEMO-1001" />
+          </div>
+          <div>
+            <label>Category</label>
+            <select name="category">
+              <option value="apparel">Apparel</option>
+              <option value="home">Home furnishing</option>
+              <option value="kitchen">Kitchenware</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Customer</label>
+            <select name="customer_id">
+              {% for c in customers %}
+              <option value="{{ c.customer_id }}">{{ c.name }} ({{ c.customer_id }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label>Manufacturer</label>
+            <select name="manufacturer_id">
+              {% for m in manufacturers %}
+              <option value="{{ m.manufacturer_id }}">{{ m.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Valmo rider</label>
+            <select name="delivery_partner_id">
+              {% for r in riders %}
+              <option value="{{ r.delivery_partner_id }}">{{ r.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label>Return reason</label>
+            <input name="return_reason" required placeholder="e.g. product damaged / empty box / size issue" />
+          </div>
+        </div>
+        <label>Customer notes</label>
+        <textarea name="customer_notes" rows="3" placeholder="Optional"></textarea>
+        <div class="row">
+          <div>
+            <label>Package seal intact?</label>
+            <select name="package_seal_intact"><option value="yes">Yes</option><option value="no">No</option></select>
+          </div>
+          <div>
+            <label>Photos show damage/quality issue?</label>
+            <select name="photos_show_damage"><option value="no">No</option><option value="yes">Yes</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Empty box reported?</label>
+            <select name="empty_box_reported"><option value="no">No</option><option value="yes">Yes</option></select>
+          </div>
+          <div>
+            <label>Delivery OTP verified?</label>
+            <select name="delivery_otp_verified"><option value="yes">Yes</option><option value="no">No</option></select>
+          </div>
+        </div>
+        <p style="margin-top:16px"><button class="btn" type="submit">Run Return Shield + Gemini</button></p>
+      </form>
+    </div>
+
+    {% if result %}
+    <div class="result">
+      <h2>Decision: {{ result.liable }}</h2>
+      <p><strong>Attribution:</strong> {{ result.attribution }}</p>
+      <p><strong>Customer UTI:</strong> {{ result.uti_before.score }} → {{ result.uti_after.score }} / 900</p>
+      <p><strong>Checkout policy:</strong> {{ result.policy.action }}</p>
+      <p><strong>Rider score:</strong> {{ result.rider_score.score }}/900 · <strong>Manufacturer score:</strong> {{ result.manufacturer_score.score }}/900</p>
+      {% if result.gemini %}
+      <hr style="border-color:#6b3fa0; margin:14px 0" />
+      <p><strong>Gemini summary:</strong> {{ result.gemini.summary }}</p>
+      {% if result.gemini.manufacturer_message %}
+      <p><strong>Message to factory:</strong> {{ result.gemini.manufacturer_message }}</p>
+      {% endif %}
+      {% if result.gemini.rationale %}
+      <ul>
+        {% for r in result.gemini.rationale %}<li>{{ r }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% if result.gemini.error %}<p class="pill warn">{{ result.gemini.error }}</p>{% endif %}
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

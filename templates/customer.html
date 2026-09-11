@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ customer.name }} · UTI</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <strong>{{ customer.name }}</strong>
+      <div><a href="/">← Dashboard</a></div>
+    </div>
+    <div class="hero">
+      <h1>UTI {{ uti.score }}/900</h1>
+      <p>{{ uti.label }} · Band {{ uti.band }}</p>
+      <p style="margin-top:8px"><span class="pill {% if policy.cod_allowed %}ok{% else %}warn{% endif %}">{{ policy.action }}</span></p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Signals</h3>
+        <table>
+          <tr><td>Orders</td><td>{{ customer.total_orders }}</td></tr>
+          <tr><td>RTO</td><td>{{ customer.rto_count }} ({{ uti.rto_rate }})</td></tr>
+          <tr><td>Returns</td><td>{{ customer.return_count }} ({{ uti.return_rate }})</td></tr>
+          <tr><td>Fake return flags</td><td>{{ customer.fake_return_flags }}</td></tr>
+          <tr><td>Prepaid orders</td><td>{{ customer.prepaid_orders }}</td></tr>
+          <tr><td>Reverse neg. feedback</td><td>{{ customer.reverse_negative_feedback }}</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Score breakdown</h3>
+        <table>
+          {% for k, v in uti.breakdown.items() %}
+          <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Reverse feedback log</h3>
+      {% if feedback %}
+      <table>
+        <tr><th>Tag</th><th>Rating</th><th>By</th></tr>
+        {% for f in feedback %}
+        <tr><td>{{ f.tag }}</td><td>{{ f.rating }}</td><td>{{ f.manufacturer_id }}</td></tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p class="muted">No manufacturer reverse feedback yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

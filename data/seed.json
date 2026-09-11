@@ -1,0 +1,80 @@
+{
+  "customers": [
+    {
+      "customer_id": "CUST-780",
+      "name": "Ananya R.",
+      "total_orders": 42,
+      "rto_count": 2,
+      "return_count": 3,
+      "fake_return_flags": 0,
+      "prepaid_orders": 28,
+      "on_time_payments": 40,
+      "reverse_negative_feedback": 0
+    },
+    {
+      "customer_id": "CUST-640",
+      "name": "Rohit K.",
+      "total_orders": 25,
+      "rto_count": 5,
+      "return_count": 6,
+      "fake_return_flags": 1,
+      "prepaid_orders": 4,
+      "on_time_payments": 18,
+      "reverse_negative_feedback": 1
+    },
+    {
+      "customer_id": "CUST-420",
+      "name": "Fraud Pattern Demo",
+      "total_orders": 18,
+      "rto_count": 9,
+      "return_count": 8,
+      "fake_return_flags": 3,
+      "prepaid_orders": 1,
+      "on_time_payments": 8,
+      "reverse_negative_feedback": 4
+    },
+    {
+      "customer_id": "CUST-850",
+      "name": "Priya S.",
+      "total_orders": 60,
+      "rto_count": 1,
+      "return_count": 2,
+      "fake_return_flags": 0,
+      "prepaid_orders": 50,
+      "on_time_payments": 59,
+      "reverse_negative_feedback": 0
+    }
+  ],
+  "manufacturers": [
+    {
+      "manufacturer_id": "MFR-SURAT-01",
+      "name": "Surat Weave Mills",
+      "orders_fulfilled": 1200,
+      "quality_flags": 8,
+      "on_time_rate": 0.94
+    },
+    {
+      "manufacturer_id": "MFR-TPR-02",
+      "name": "Tirupur Knit Co",
+      "orders_fulfilled": 800,
+      "quality_flags": 22,
+      "on_time_rate": 0.88
+    }
+  ],
+  "riders": [
+    {
+      "delivery_partner_id": "VALMO-R-11",
+      "name": "Valmo Rider Arjun",
+      "deliveries": 900,
+      "incidents": 3,
+      "otp_success": 870
+    },
+    {
+      "delivery_partner_id": "VALMO-R-77",
+      "name": "Valmo Rider Imran",
+      "deliveries": 400,
+      "incidents": 18,
+      "otp_success": 320
+    }
+  ]
+}
