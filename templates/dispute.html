@@ -17,6 +17,7 @@
       <h1>Analyze a return / RTO dispute</h1>
       <p>
         Rules decide who pays. Gemini writes the manufacturer-facing explanation.
+        Attach photos/videos as evidence. Pick any delivery partner (Valmo, Blue Dart, Delhivery, Shadowfax, …).
         {% if gemini_configured %}
           <span class="badge-key">Gemini on</span>
         {% else %}
@@ -26,11 +27,11 @@
     </div>
 
     <div class="card" style="margin-top:16px">
-      <form method="post" action="/dispute">
+      <form method="post" action="/dispute" enctype="multipart/form-data">
         <div class="row">
           <div>
             <label>Order ID</label>
-            <input name="order_id" required value="ORD-DEMO-1001" />
+            <input name="order_id" required value="ORD-DEMO-1001" maxlength="64" />
           </div>
           <div>
             <label>Category</label>
@@ -61,20 +62,34 @@
         </div>
         <div class="row">
           <div>
-            <label>Valmo rider</label>
-            <select name="delivery_partner_id">
-              {% for r in riders %}
-              <option value="{{ r.delivery_partner_id }}">{{ r.name }}</option>
+            <label>Delivery partner</label>
+            <select name="delivery_partner_id" required>
+              {% for carrier, partners in riders_by_carrier.items() %}
+              <optgroup label="{{ carrier }}">
+                {% for r in partners %}
+                <option value="{{ r.delivery_partner_id }}">{{ r.name }} · {{ r.delivery_partner_id }}</option>
+                {% endfor %}
+              </optgroup>
               {% endfor %}
             </select>
           </div>
           <div>
             <label>Return reason</label>
-            <input name="return_reason" required placeholder="e.g. product damaged / empty box / size issue" />
+            <input name="return_reason" required maxlength="500" placeholder="e.g. product damaged / empty box / size issue" />
           </div>
         </div>
         <label>Customer notes</label>
-        <textarea name="customer_notes" rows="3" placeholder="Optional"></textarea>
+        <textarea name="customer_notes" rows="3" maxlength="1000" placeholder="Optional"></textarea>
+
+        <label>Evidence photos / videos</label>
+        <input
+          type="file"
+          name="evidence"
+          accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+          multiple
+        />
+        <p class="hint">Up to 5 files · images ≤5&nbsp;MB (JPEG/PNG/WebP) · video ≤25&nbsp;MB (MP4/WebM). Uploaded photos count as damage evidence for rules.</p>
+
         <div class="row">
           <div>
             <label>Package seal intact?</label>
@@ -103,9 +118,28 @@
     <div class="result">
       <h2>Decision: {{ result.liable }}</h2>
       <p><strong>Attribution:</strong> {{ result.attribution }}</p>
+      <p><strong>Carrier:</strong> {{ result.delivery_carrier }} · {{ result.delivery_partner_name }}</p>
       <p><strong>Customer UTI:</strong> {{ result.uti_before.score }} → {{ result.uti_after.score }} / 900</p>
       <p><strong>Checkout policy:</strong> {{ result.policy.action }}</p>
-      <p><strong>Rider score:</strong> {{ result.rider_score.score }}/900 · <strong>Manufacturer score:</strong> {{ result.manufacturer_score.score }}/900</p>
+      <p><strong>Partner score:</strong> {{ result.rider_score.score }}/900 · <strong>Manufacturer score:</strong> {{ result.manufacturer_score.score }}/900</p>
+
+      {% if result.evidence %}
+      <div class="evidence-block">
+        <p><strong>Attached evidence ({{ result.evidence|length }})</strong></p>
+        <div class="evidence-grid">
+          {% for e in result.evidence %}
+            {% if e.kind == "image" %}
+            <a href="{{ e.url }}" target="_blank" rel="noopener">
+              <img src="{{ e.url }}" alt="Evidence photo" loading="lazy" />
+            </a>
+            {% else %}
+            <video controls preload="metadata" src="{{ e.url }}"></video>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
       {% if result.gemini %}
       <hr style="border-color:#6b3fa0; margin:14px 0" />
       <p><strong>Gemini summary:</strong> {{ result.gemini.summary }}</p>

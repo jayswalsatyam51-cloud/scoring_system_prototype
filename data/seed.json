@@ -64,17 +64,83 @@
   "riders": [
     {
       "delivery_partner_id": "VALMO-R-11",
-      "name": "Valmo Rider Arjun",
+      "carrier": "Valmo",
+      "name": "Arjun · Valmo",
       "deliveries": 900,
       "incidents": 3,
       "otp_success": 870
     },
     {
       "delivery_partner_id": "VALMO-R-77",
-      "name": "Valmo Rider Imran",
+      "carrier": "Valmo",
+      "name": "Imran · Valmo",
       "deliveries": 400,
       "incidents": 18,
       "otp_success": 320
+    },
+    {
+      "delivery_partner_id": "BD-DEL-01",
+      "carrier": "Blue Dart",
+      "name": "Blue Dart Delhi Hub",
+      "deliveries": 5200,
+      "incidents": 28,
+      "otp_success": 5050
+    },
+    {
+      "delivery_partner_id": "BD-MUM-02",
+      "carrier": "Blue Dart",
+      "name": "Blue Dart Mumbai Express",
+      "deliveries": 4100,
+      "incidents": 55,
+      "otp_success": 3880
+    },
+    {
+      "delivery_partner_id": "DLV-BLR-01",
+      "carrier": "Delhivery",
+      "name": "Delhivery Bengaluru Node",
+      "deliveries": 7800,
+      "incidents": 90,
+      "otp_success": 7400
+    },
+    {
+      "delivery_partner_id": "DLV-HYD-03",
+      "carrier": "Delhivery",
+      "name": "Delhivery Hyderabad Last-Mile",
+      "deliveries": 3500,
+      "incidents": 120,
+      "otp_success": 3100
+    },
+    {
+      "delivery_partner_id": "SFX-NCR-01",
+      "carrier": "Shadowfax",
+      "name": "Shadowfax NCR Rider Cell",
+      "deliveries": 6100,
+      "incidents": 45,
+      "otp_success": 5850
+    },
+    {
+      "delivery_partner_id": "SFX-PNQ-02",
+      "carrier": "Shadowfax",
+      "name": "Shadowfax Pune (Shadow X)",
+      "deliveries": 2900,
+      "incidents": 70,
+      "otp_success": 2550
+    },
+    {
+      "delivery_partner_id": "ECOM-CHN-01",
+      "carrier": "Ecom Express",
+      "name": "Ecom Express Chennai",
+      "deliveries": 4400,
+      "incidents": 60,
+      "otp_success": 4150
+    },
+    {
+      "delivery_partner_id": "DTDC-KOL-01",
+      "carrier": "DTDC",
+      "name": "DTDC Kolkata Hub",
+      "deliveries": 3200,
+      "incidents": 48,
+      "otp_success": 3000
     }
   ]
 }

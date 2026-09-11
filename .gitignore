@@ -46,3 +46,6 @@ Thumbs.db
 *.log
 *.pid
 .cache/
+
+# User-uploaded dispute evidence (local / Render ephemeral)
+uploads/

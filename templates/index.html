@@ -20,7 +20,7 @@
     <div class="hero">
       <h1>User Trust Index (UTI) — e-comm CIBIL for C2M</h1>
       <p>
-        Deterministic scoring for customers, Valmo riders, and manufacturers.
+        Deterministic scoring for customers, delivery partners (Valmo, Blue Dart, Delhivery, Shadowfax, …), and manufacturers.
         Gemini explains disputes; rules decide liability (damage → manufacturer, tamper/empty → Meesho/delivery).
         {% if gemini_configured %}
           <span class="badge-key">Gemini API connected</span>
@@ -53,11 +53,15 @@
         </table>
       </div>
       <div class="card">
-        <h3>Valmo Riders</h3>
+        <h3>Delivery partners</h3>
         <table>
-          <tr><th>Name</th><th>ID</th></tr>
+          <tr><th>Carrier</th><th>Partner</th><th>ID</th></tr>
           {% for r in riders %}
-          <tr><td>{{ r.name }}</td><td>{{ r.delivery_partner_id }}</td></tr>
+          <tr>
+            <td>{{ r.carrier or "—" }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.delivery_partner_id }}</td>
+          </tr>
           {% endfor %}
         </table>
       </div>
@@ -67,10 +71,11 @@
       <h3>Recent dispute decisions</h3>
       {% if disputes %}
       <table>
-        <tr><th>Order</th><th>Liable</th><th>UTI after</th></tr>
+        <tr><th>Order</th><th>Carrier</th><th>Liable</th><th>UTI after</th></tr>
         {% for d in disputes %}
         <tr>
           <td>{{ d.order_id }}</td>
+          <td>{{ d.delivery_carrier or "—" }}</td>
           <td>{{ d.liable }}</td>
           <td>{{ d.uti_after.score }}/900</td>
         </tr>

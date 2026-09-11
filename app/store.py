@@ -45,7 +45,16 @@ class Store:
         return [deepcopy(v) for v in self.manufacturers.values()]
 
     def list_riders(self) -> list[dict[str, Any]]:
-        return [deepcopy(v) for v in self.riders.values()]
+        rows = [deepcopy(v) for v in self.riders.values()]
+        rows.sort(key=lambda r: (r.get("carrier") or "Other", r.get("name") or ""))
+        return rows
+
+    def riders_by_carrier(self) -> dict[str, list[dict[str, Any]]]:
+        grouped: dict[str, list[dict[str, Any]]] = {}
+        for r in self.list_riders():
+            carrier = (r.get("carrier") or "Other").strip() or "Other"
+            grouped.setdefault(carrier, []).append(r)
+        return grouped
 
     def list_disputes(self) -> list[dict[str, Any]]:
         return list(reversed(self.disputes[-50:]))
